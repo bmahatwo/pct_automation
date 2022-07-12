@@ -1,0 +1,20 @@
+{
+	"collect_ADL_specific_logs" : "Yes",
+	"perform_wget_download_for_WWAN" : "No",
+	"stop_on_error_wget_download_for_WWAN" : "No",
+	"save_detailed_logs_for_WWAN" : "No",
+	"save_detailed_logs_only_On_FF" : "Yes",
+	"compare_file_sizes_of_original" : "Yes",
+	"move_var_log_messages_folder" : "Yes",
+	"set_corp_proxy" : "No",
+	"capture_DRM_logs" : "No",
+	"login_to_DUT" : "Yes",
+	"enumerate_Thunderbolt_TR_devices" : "No",
+	"enumerate_TBT_AR_USB4_devices" : "No",
+	"stop_on_error_screenshot" : "No",
+	"stop_on_error_prev_sleep_state" : "No",
+	"stop_on_error_network_connection" : "No",
+	"stop_on_error_boot_perf" : "No",
+	"stop_on_error_TBT_AR_TR" : "No",
+	"substate_residencies_supported" : ["S0i2.0", "S0i3.0"]
+}

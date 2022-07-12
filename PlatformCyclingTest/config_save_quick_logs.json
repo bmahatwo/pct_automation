@@ -1,0 +1,57 @@
+{
+	"save_quick_logs_for_tracking" :
+	{
+		"aplay -l" : "aplay_original.txt",
+		"arecord -l" : "arecord_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_display_info" : "i915_display_info_original.txt",
+		"cat /var/log/cros_ec.log | tail -3500" : "cros_ec_original.txt",
+		"cat /var/log/cros_ec.previous | tail -3500" : "cros_ec_previous_original.txt",
+		"cbmem -c" : "cbmem_c.txt",
+		"cbmem -t" : "cbmem_t.txt",
+		"cat /proc/bus/input/devices" : "bus_pci_devices_original.txt",
+		"echo hcitool dev:" : "hcitool_dev.txt",
+		"hcitool dev" : "hcitool_dev.txt",
+		"echo hcitool con:" : "hcitool_dev.txt",
+		"hcitool con" : "hcitool_dev.txt",
+		"lscpu" : "lscpu_original.txt",
+		"lshw" : "lshw_original.txt",
+		"lsusb" : "lsusb_original.txt",
+		"lsusb -t" : "lsusb_t_original.txt",
+		"lsusb -v" : "lsusb_v_original.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f ! -name nvmem ! -name boot_acl -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_original.txt",
+		"ifconfig" : "ifconfig_original.txt",
+		"iw list" : "iw_list_original.txt",
+		"mount" : "mount_original.txt",
+		"power_supply_info" : "power_supply_info_original.txt",
+		"elogtool list | tail -100" : "elogtool_list_original.txt",
+		"cat /sys/kernel/debug/pmc_core/package_cstate_show" : "package_cstate_show.txt",
+		"cat /sys/kernel/debug/pmc_core/package_cstate_show | grep 'Package C10' | awk -F ': ' '{ print $2 }'" : "package_cstate_show_C10.txt",
+		"cat /run/power_manager/root/last_resume_timings" : "last_resume_timings.txt",
+		"cat /sys/kernel/debug/pmc_core/slp_s0_residency_usec" : "slp_s0_residency_usec.txt",
+		"cat /sys/kernel/debug/pmc_core/substate_residencies" : "substate_residencies_original.txt"
+	},
+	"save_quick_count_for_tracking_for_nonzero" :
+	{
+		"aplay -l | grep card | wc -l" : ["STOP_ON_ERROR_NO", "6", "Count of audio playback devices"],
+		"amixer -c 0 contents | grep CARD | wc -l" : ["STOP_ON_ERROR_NO", "6", "Count of audio mixer devices"],
+		"arecord -l | grep card | wc -l" : ["STOP_ON_ERROR_NO", "5", "Count of audio record devices"],
+		"cat /sys/kernel/debug/dri/*/i915_display_info | grep ', active=yes' | wc -l" : ["STOP_ON_ERROR_NO", "2", "Count of active displays"],
+		"lspci | wc -l" : ["STOP_ON_ERROR_NO", "5", "Count of PCI devices"],
+		"echo $(($(lsusb | wc -l) + $(find /sys/bus/thunderbolt/devices/*/* -type f -name device -exec grep -i '' {} 2>/dev/null + | wc -l)))" : ["STOP_ON_ERROR_NO", "6", "Count of Thunderbolt and USB devices"],
+		"ls -l /dev/ | wc -l" : ["STOP_ON_ERROR_NO", "131", "Count of dev nodes"],
+		"lshw | grep description: | wc -l" : ["STOP_ON_ERROR_NO", "131", "Count of hardware devices"],
+		"cat /proc/bus/input/devices | grep Name | wc -l" : ["STOP_ON_ERROR_NO", "17", "Count of input devices"],
+		"ifconfig | grep flags | wc -l" : ["STOP_ON_ERROR_NO", "131", "Count of network interfaces"]
+	},
+	"save_quick_count_for_deviation_from_desired" :
+	{
+		"lscpu | grep Off-line | wc -l" : ["STOP_ON_ERROR_NO", "0", "Count of offline cores (must be zero)"],
+		"lscpu | grep ht | wc -l" : ["STOP_ON_ERROR_NO", "1", "Count of Hyperthreading enabled (must be one)"],
+		"lscpu | grep -i On-line | grep 0 | wc -l" : ["STOP_ON_ERROR_NO", "1", "Count of core 0 online processor (must be one)"]
+	},
+	"save_quick_string_for_deviation_from_desired" :
+	{
+		"lscpu | grep -i On-line | awk -F \":\" '{print $2}' | sed 's/ //g'" : ["STOP_ON_ERROR_NO", "0-3", "Count string of On-line processors (must be non-zero)"],
+		"lscpu | grep -i Off-line | awk -F \":\" '{print $2}' | sed 's/ //g'"  : ["STOP_ON_ERROR_NO", "0-3", "Count string of Off-line processors (must be empty)"]
+	}
+}

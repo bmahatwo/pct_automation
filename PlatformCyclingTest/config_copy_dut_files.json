@@ -1,0 +1,28 @@
+{
+	"copy_log_files_for_iteration" :
+	{
+		"/tmp/uptime-chrome-exec" : "STOP_ON_ERROR_NO",
+		"/tmp/uptime-chrome-main" : "STOP_ON_ERROR_NO",
+		"/tmp/uptime-login-prompt-visible" : "STOP_ON_ERROR_NO",
+		"/tmp/uptime-network-ethernet-ready" : "STOP_ON_ERROR_NO",
+		"/tmp/uptime-network-wifi-ready" : "STOP_ON_ERROR_NO",
+		"/tmp/uptime-pre-startup" : "STOP_ON_ERROR_NO",
+		"/tmp/uptime-post-startup" : "STOP_ON_ERROR_NO",
+		"/tmp/firmware-boot-time" : "STOP_ON_ERROR_NO",
+		"/var/log/bios_info.txt" : "STOP_ON_ERROR_NO",
+		"/var/log/net.log" : "STOP_ON_ERROR_NO",
+		"/var/log/typecd.log" : "STOP_ON_ERROR_NO"
+	},
+	"copy_autotest_logs_on_login_error" :
+	{
+		"/usr/local/autotest/results/default/status" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/debug/client.DEBUG" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/debug/client.ERROR" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/debug/client.INFO" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/debug/client.WARNING" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/desktopui_SimpleLogin/debug/desktopui_SimpleLogin.DEBUG" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/desktopui_SimpleLogin/debug/desktopui_SimpleLogin.ERROR" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/desktopui_SimpleLogin/debug/desktopui_SimpleLogin.INFO" : "STOP_ON_ERROR_NO",
+		"/usr/local/autotest/results/default/desktopui_SimpleLogin/debug/desktopui_SimpleLogin.WARNING" : "STOP_ON_ERROR_NO"
+	}
+}

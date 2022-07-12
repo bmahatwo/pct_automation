@@ -1,0 +1,619 @@
+{
+	"collect_ADL_specific_logs" :
+	{
+		"echo \"i2cdetect: edited output: bus 15:\" `i2cdetect -y -r 15 2>/dev/null | grep 30 | awk -F ' ' '{print $11$12}'`" : "miscellaneous.txt",
+		"echo \"0xfe00031c:\" `iotools mmio_read32 0xfe00031c`" : "miscellaneous.txt",
+		"echo \"0xfe00034c:\" `iotools mmio_read32 0xfe00034c`" : "miscellaneous.txt",
+		"echo \"iotools rdmsr 0 0x632:\" `iotools rdmsr 0 0x632`" : "miscellaneous.txt",
+		"echo \"rdmsr -a 0x1b0:\" `rdmsr -a 0x1b0`" : "miscellaneous.txt",
+		"echo \"0xfbc10564-TCSS_TCCOLD_PORT1:\" `iotools mmio_read32 0xfbc10564`" : "miscellaneous.txt",
+		"echo \"0xfbc10560-TCSS_TCCOLD_PORT0:\" `iotools mmio_read32 0xfbc10560`" : "miscellaneous.txt",
+		"echo \"0xfe00193c:\" `iotools mmio_read32 0xfe00193c`" : "miscellaneous.txt",
+		"echo \"0xfe001c80:\" `iotools mmio_read32 0xfe001c80`" : "miscellaneous.txt",
+		"echo \"0xfe001c8c:\" `iotools mmio_read32 0xfe001c8c`" : "miscellaneous.txt",
+		"echo \"0x44470:\" `intel_reg read 0x44470`" : "miscellaneous.txt",
+		"echo \"0x163890:\" `intel_reg read 0x163890`" : "miscellaneous.txt",
+		"echo \"0x163894:\" `intel_reg read 0x163894`" : "miscellaneous.txt",
+		"echo \"0x1638a0:\" `intel_reg read 0x1638a0`" : "miscellaneous.txt",
+		"echo \"0x16E8a0:\" `intel_reg read 0x16E8a0`" : "miscellaneous.txt",
+
+		"echo ectool i2cxfer 3 0x56 16 4" : "miscellaneous.txt",
+		"ectool i2cxfer 3 0x56 16 4" : "miscellaneous.txt",
+
+		"echo ectool i2cxfer 8 0x58 16 4" : "miscellaneous.txt",
+		"ectool i2cxfer 8 0x58 16 4" : "miscellaneous.txt",
+
+		"echo iotools mmio_dump 0xc1100500 0x100:" : "iotools_mmio_dump_original.txt",
+		"iotools mmio_dump 0xc1100500 0x100" : "iotools_mmio_dump_original.txt",
+
+		"echo iotools mmio_dump 0xfbc10560 0x10:" : "iotools_mmio_dump_original.txt",
+		"iotools mmio_dump 0xfbc10560 0x10" : "iotools_mmio_dump_original.txt",
+
+		"echo iotools mmio_dump 0xfbc10160 0x10:" : "iotools_mmio_dump_original.txt",
+		"iotools mmio_dump 0xfbc10160 0x10" : "iotools_mmio_dump_original.txt",
+
+		"echo iotools mmio_read32 0xfedce454:" : "iotools_mmio_dump_original.txt",
+		"iotools iotools mmio_read32 0xfedce454" : "iotools_mmio_dump_original.txt"
+	},
+
+	"save_detailed_logs_Only_in_original" :
+	{
+		"modprobe configs && zcat /proc/config.gz" : "proc_config_original.txt"
+	},
+
+	"save_detailed_logs_for_WWAN" :
+	{
+		"echo ip -o -4 addr list wwan0:" : "ip_original.txt",
+		"ip -o -4 addr list wwan0 | awk '{print $4}' | cut -d/ -f1" : "ip_original.txt",
+
+		"echo ip -o -4 addr list cmni0:" : "ip_original.txt",
+		"ip -o -4 addr list cmni0 | awk '{print $4}' | cut -d/ -f1" : "ip_original.txt",
+
+		"modem status | egrep -v -e 'signal|Drivers|Ports|SignalQuality|InitialEpsBearer|PowerState|freedesktop|m3gpp-operator-name|OperatorName|registerStateV2Info'" : "modem_status.txt",
+		"modem status" : "modem_status_Original.txt",
+
+		"mmcli -L" : "modem_mmcli_L_original.txt",
+		"mmcli -m 0" : "modem_mmcli_m_original.txt",
+		"mmcli -m $(mmcli -L | grep ModemManager | cut -d \"/\" -f6 | cut -d \" \" -f1)" : "modem_mmcli_m_dynamic_original.txt"
+	},
+
+	"save_detailed_logs_only_On_FF" :
+	{
+		"tpm-manager get_version_info" : "flashrom_original.txt",
+		"tpm_version" : "flashrom_original.txt",
+		"find /sys/class/thermal/thermal_zone*/type -type f -exec grep -i '' {} 2>/dev/null +" : "thermal_zone_information_original.txt",
+		"find /sys/class/thermal/thermal_zone*/temp -type f -exec grep -i '' {} 2>/dev/null +" : "thermal_zone_information_original.txt",
+		"find /sys/class/thermal/cooling_device*/type -type f -exec grep -i '' {} 2>/dev/null +" : "thermal_zone_information_original.txt",
+		"find /sys/class/thermal/cooling_device*/type -type f -exec grep -i '' {} 2>/dev/null +" : "thermal_zone_information_original.txt",
+		"find /sys/class/thermal/*/temp -type f -exec grep -i '' {} 2>/dev/null +" : "thermal_zone_information_original.txt",
+		"find /sys/devices/platform/coretemp.0/hwmon/*/*input -type f -exec grep -i '' {} 2>/dev/null +" : "thermal_zone_information_original.txt",
+		"find /sys/class/powercap/*/*/*power_limit_uw -type f -exec grep -i '' {} 2>/dev/null +" : "thermal_zone_information_original.txt"
+	},
+
+	"save_detailed_logs_RVP_and_FF" :
+	{
+		"cat /sys/kernel/debug/pmc_core/pch_ip_power_gating_status" : "pch_ip_power_gating_status_original.txt",
+		
+		"for path_bin in /bin/*; do md5sum $path_bin; done" : "md5sum_files_original.txt",
+		"for path_bin in /sbin/*; do md5sum $path_bin; done" : "md5sum_files_original.txt",
+		"for path_bin in /usr/bin/*; do md5sum $path_bin; done" : "md5sum_files_original.txt",
+		"for path_bin in /usr/sbin/*; do md5sum $path_bin; done" : "md5sum_files_original.txt",
+		"for path_bin in /usr/local/sbin/*; do md5sum $path_bin; done" : "md5sum_files_original.txt",
+		"for path_bin in /usr/lib64/*; do md5sum $path_bin; done" : "md5sum_files_original.txt",
+
+		"for path_bin in /bin/*; do ls -lrt $path_bin | awk '{print $5 ',' $9}';done" : "ls_files_original.txt",
+		"for path_bin in /sbin/*; do ls -lrt $path_bin | awk '{print $5 ',' $9}';done" : "ls_files_original.txt",
+		"for path_bin in /usr/bin/*; do ls -lrt $path_bin | awk '{print $5 ',' $9}';done" : "ls_files_original.txt",	
+		"for path_bin in /usr/sbin/*; do ls -lrt $path_bin | awk '{print $5 ',' $9}';done" : "ls_files_original.txt",
+		"for path_bin in /usr/local/sbin/*; do ls -lrt $path_bin | awk '{print $5 ',' $9}';done" : "ls_files_original.txt",
+		"for path_bin in /usr/lib64/*; do ls -lrt $path_bin | awk '{print $5 ',' $9}';done" : "ls_files_original.txt",
+
+		"find /sys/devices/system/cpu/cpufreq -type f ! -name energy_performance_available_preferences ! -name cpuinfo_transition_latency ! -name scaling_setspeed -exec grep -i '' {} +" : "cpu_processors_original.txt",
+		"find /sys/devices/system/cpu/cpuidle -type f -exec grep -i '' {} +" : "cpu_processors_original.txt",
+		"find /sys/devices/system/cpu/cpu*/cpuidle -type f -exec grep -i '' {} +" : "cpu_processors_original.txt",
+		"find /sys/devices/system/cpu/cpu*/microcode -type f -exec grep -i '' {} +" : "cpu_processors_original.txt",
+		"find /sys/devices/system/cpu/cpu*/online -type f -exec grep -i '' {} +" : "cpu_processors_original.txt",
+		"echo \"/sys/devices/system/cpu/intel_pstate/no_turbo: \" `cat /sys/devices/system/cpu/intel_pstate/no_turbo`" : "cpu_processors_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_frequency_info:" : "i915_miscellaneous_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_frequency_info" : "i915_miscellaneous_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_rps_boost_info:" : "i915_miscellaneous_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_rps_boost_info" : "i915_miscellaneous_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_dmc_info:" : "i915_miscellaneous_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_dmc_info" : "i915_miscellaneous_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_gpu_info:" : "i915_miscellaneous_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_gpu_info" : "i915_miscellaneous_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_edp_psr_status:" : "i915_miscellaneous_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_edp_psr_status" : "i915_miscellaneous_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_guc_load_status:" : "i915_miscellaneous_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_guc_load_status" : "i915_miscellaneous_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_huc_load_status:" : "i915_miscellaneous_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_huc_load_status" : "i915_miscellaneous_original.txt",
+
+		"echo \"/sys/kernel/debug/dri/*/i915_fbc_status:\" `cat /sys/kernel/debug/dri/*/i915_fbc_status`" : "i915_miscellaneous_original.txt",
+
+		"echo modetest -c:" : "i915_miscellaneous_original.txt",
+		"modetest -c" : "i915_miscellaneous_original.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_dp_mst_info:" : "i915_display_details.txt",
+		"cat /sys/kernel/debug/dri/*/i915_dp_mst_info | egrep -v -e 'mst|port'" : "i915_display_details.txt",
+		"echo wflinfo: " : "i915_display_details.txt",
+		"wflinfo --platform=null --api=gles2" : "i915_display_details.txt",
+		"echo \"/sys/module/i915/parameters/enable_psr:\" `cat /sys/module/i915/parameters/enable_psr`" : "i915_display_details.txt",
+		"echo \"/sys/module/i915/parameters/enable_fbc :\" `cat /sys/module/i915/parameters/enable_fbc`" : "i915_display_details.txt",
+		"echo \"/sys/module/i915/parameters/enable_dp_mst :\" `cat /sys/module/i915/parameters/enable_dp_mst`" : "i915_display_details.txt",
+		"echo \"/sys/module/i915/parameters/nuclear_pageflip :\" `cat /sys/module/i915/parameters/nuclear_pageflip`" : "i915_display_details.txt",
+		"grep --with-filename '' $(find /sys/devices/pci0000:00/0000:00:02.0/drm/card*/* -type f -name gt* ! -name gt_cur_freq_mhz ! -name gt_act_freq_mhz)" : "i915_display_details.txt",
+		"grep --with-filename '' $(find /sys/class/drm/card*/* -type f -name gt* ! -name gt_cur_freq_mhz ! -name gt_act_freq_mhz)" : "i915_display_details.txt",
+
+		"echo \"/sys/class/drm/card*/power/rc6_enable:\" `cat /sys/class/drm/card*/power/rc6_enable`" : "miscellaneous.txt",
+		"echo \"/sys/class/drm/card*/power/rc6_residency_ms:\" `cat /sys/class/drm/card*/power/rc6_residency_ms`" : "miscellaneous.txt",
+
+		"cat /sys/kernel/debug/dri/*/i915_display_info | egrep -v -e 'cursor|type=CUR|underrun reporting: cpu|little|status:|CONNECTOR'" : "i915_display_info.txt",
+
+		"echo /sys/kernel/debug/dri/*/i915_dp_mst_info:" : "i915_display_info_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_dp_mst_info" : "i915_display_info_original.txt",
+		"cat /sys/kernel/debug/dri/*/i915_display_info" : "i915_display_info_original.txt",
+
+		"echo /proc/cmdline" : "miscellaneous.txt",
+		"cat /proc/cmdline" : "miscellaneous.txt",
+
+		"echo \"/proc/version:\" `cat /proc/version`" : "miscellaneous.txt",
+		"echo \" boot_id:\" `cat /proc/sys/kernel/random/boot_id`" : "miscellaneous.txt",
+
+		"echo /proc/crypto" : "miscellaneous.txt",
+		"cat /proc/crypto" : "miscellaneous.txt",
+
+		"echo cryptsetup status /dev/mapper/encstateful" : "miscellaneous.txt",
+		"cryptsetup status /dev/mapper/encstateful" : "miscellaneous.txt",
+
+		"echo i2cdetect -y -r 15:" : "miscellaneous.txt",
+		"i2cdetect -y -r 15" : "miscellaneous.txt",
+
+		"echo /proc/acpi/wakeup" : "miscellaneous.txt",
+		"cat /proc/acpi/wakeup" : "miscellaneous.txt",
+
+		"echo /proc/driver/rtc" : "miscellaneous.txt",
+		"cat /proc/driver/rtc" : "miscellaneous.txt",
+
+		"cat /etc/lsb-release" : "lsb_release_original.txt",
+
+		"echo ls -d /home/chronos/u-*" : "miscellaneous.txt",
+		"ls -d /home/chronos/u-*" : "miscellaneous.txt",
+		"echo /var/cache/shill/default.profile" : "miscellaneous.txt",
+		"cat /var/cache/shill/default.profile" : "miscellaneous.txt",
+
+		"i2cdetect -l | sort" : "i2cdetect.txt",
+
+		"find /sys/kernel/irq/*/per_cpu_count -type f -exec grep -i '' {} 2>/dev/null +" : "per_cpu_count_original.txt",
+
+		"grep --with-filename '' $(find /usr/share/power_manager/ -type f | sort)" : "power_manager_original.txt",
+		"grep --with-filename '' $(find /sys/class/leds/*/* -type f ! -name autosuspend_delay_ms ! -name trigger | sort)" : "sys_class_original.txt",
+
+		"ls -l /dev/" : "dev_original.txt",
+		"lsusb | cut -d' ' -f7- | sort" : "lsusb.txt",
+		"echo \" lsusb # of USB devices is \" `lsusb | wc -l`" : "lsusb_devices.txt",
+		"echo \" lsusb -t # of USB devices is \" `lsusb -t | wc -l`" : "lsusb_devices.txt",
+		"lsusb -t | grep '/:' | cut -d'=' -f2- | egrep -v -e 'xhci_hcd' | sort" : "lsusb_t.txt",
+		"lsusb -t | rev | cut -d ',' -f1 | cut -d ' ' -f1 | rev | sort" : "lsusb_t_speeds.txt",
+		"lsusb -t | egrep -v -e '/:' | cut -d',' -f2- | sort" : "lsusb_t.txt",
+		"lsusb" : "lsusb_original.txt",
+		"lsusb -t" : "lsusb_t_original.txt",
+		"lsusb -v" : "lsusb_v_original.txt",
+		"find /sys/devices/ -name '*i2c*'" : "i2c_devices_original.txt",
+		"find /sys/devices/ -name '*acpi*'" : "acpi_devices_original.txt",
+		"ls -l /sys/bus/i2c/devices/" : "i2c_devices_original.txt",
+		"ls -l /sys/bus/acpi/devices/" : "acpi_devices_original.txt",
+		"find /sys/kernel/debug/pinctrl -print" : "pinctrl_original.txt",
+		"find /sys/kernel/debug/pinctrl -type f ! -name pinconf-pins -exec grep -i '' {} +" : "pinctrl_original.txt",
+		"usb-devices" : "usb_devices_original.txt",
+		"v4l2-ctl --all" : "v4l2_info_original.txt",
+		"v4l2-ctl --list-devices" : "v4l2_info_original.txt",
+		"media-ctl -pv | sed 's/81:.*/81:/gi' | awk -F '/device node name /dev/video' '{print $1}'" : "media_ctl.txt",
+		"media-ctl -pv" : "media_ctl_original.txt",
+		"lshw | egrep -v -e 'resources|size.*MHz|size.*GHz|bus info|bit/s|logical name|capacity|configuration|       serial: ' | sort" : "lshw.txt",
+		"lshw" : "lshw_original.txt",
+		"lscpu | egrep -v -e 'BogoMIPS|CPU MHz'" : "lscpu.txt",
+		"lscpu -e -a" : "lscpu.txt",
+		"lscpu" : "lscpu_original.txt",
+		"lspci -t" : "lspci_t.txt",
+
+		"echo lspci -nnkvv" : "lspci_original.txt",
+		"lspci -nnkvv" : "lspci_original.txt",
+
+		"echo lspci" : "lspci_original.txt",
+		"lspci" : "lspci_original.txt",
+
+		"find /sys/bus/pci/devices/*/power/* -type f -name control -exec grep -i '' {} 2>/dev/null +" : "lspci_original.txt",
+		"find /sys/bus/pci/devices/*/power/* -type f -name runtime_enabled -exec grep -i '' {} 2>/dev/null +" : "lspci_original.txt",
+		"find /sys/bus/pci/devices/*/power/* -type f -name runtime_status -exec grep -i '' {} 2>/dev/null +" : "lspci_original.txt",
+
+		"cat /var/log/storage_info.txt" : "storage_info_original.txt",
+
+		"echo smartctl -a /dev/nvme0" : "storage_info_original.txt",
+		"if [ -e /dev/nvme0 ]; then smartctl -a /dev/nvme0; fi" : "storage_info_original.txt",
+
+		"echo smartctl -a /dev/sda" : "storage_info_original.txt",
+		"if [ -e /dev/sda ]; then smartctl -a /dev/sda; fi" : "storage_info_original.txt",
+
+		"echo fdisk -l" : "storage_info_original.txt",
+		"fdisk -l" : "storage_info_original.txt",
+
+		"echo /proc/scsi/scsi" : "storage_info_original.txt",
+		"cat /proc/scsi/scsi" : "storage_info_original.txt",
+
+		"echo ectool battery" : "ectool_output.txt",
+		"ectool battery 2>/dev/null | egrep -v -e 'Remaining|current|voltage|Last full charge|Flags'" : "ectool_output.txt",
+
+		"echo ectool battery" : "ectool_original.txt",
+		"ectool battery" : "ectool_original.txt",
+
+		"echo ectool gpioget count" : "ectool_output.txt",
+		"ectool gpioget count" : "ectool_output.txt",
+
+		"echo ectool gpioget all" : "ectool_original.txt",
+		"ectool gpioget all" : "ectool_original.txt",
+
+		"echo ectool gpioget all" : "ectool_output.txt",
+		"ectool gpioget all | cut -d ' ' -f3- | sort" : "ectool_output.txt",
+		"value_cbi=0;for value_cbi in 0 1 2 3 4 5 6 7 8; do echo \"ectool cbi get $value_cbi:\" `ectool cbi get $value_cbi 2>/dev/null`;done" : "ectool_output.txt",
+
+		"echo ectool temps all:" : "miscellaneous.txt",
+		"ectool temps all" : "miscellaneous.txt",
+
+		"echo ectool flashinfo:" : "ectool_output.txt",
+		"ectool flashinfo" : "ectool_output.txt",
+
+		"echo ectool pdchipinfo 0: " : "ectool_original.txt",
+		"ectool pdchipinfo 0" : "ectool_original.txt",
+
+		"echo ectool pdchipinfo 1: " : "ectool_original.txt",
+		"ectool pdchipinfo 1" : "ectool_original.txt",
+
+		"echo ectool typecdiscovery 0 0:" : "ectool_output.txt",
+		"ectool typecdiscovery 0 0" : "ectool_output.txt",
+
+		"echo ectool typecdiscovery 0 1:" : "ectool_output.txt",
+		"ectool typecdiscovery 0 1" : "ectool_output.txt",
+
+		"echo ectool typecdiscovery 1 0:" : "ectool_output.txt",
+		"ectool typecdiscovery 1 0" : "ectool_output.txt",
+
+		"echo ectool typecdiscovery 1 1:" : "ectool_output.txt",
+		"ectool typecdiscovery 1 1" : "ectool_output.txt",
+
+		"echo ectool typecdiscovery 2 0:" : "ectool_output.txt",
+		"ectool typecdiscovery 2 0" : "ectool_output.txt",
+
+		"echo ectool typecdiscovery 2 1:" : "ectool_output.txt",
+		"ectool typecdiscovery 2 1" : "ectool_output.txt",
+
+		"echo ectool typecstatus 0: " : "ectool_output.txt",
+		"ectool typecstatus 0" : "ectool_output.txt",
+
+		"echo ectool typecstatus 1: " : "ectool_output.txt",
+		"ectool typecstatus 1:" : "ectool_output.txt",
+
+		"echo ectool typecstatus 2: " : "ectool_output.txt",
+		"ectool typecstatus 2" : "ectool_output.txt",
+
+		"echo ectool version" : "ectool_output.txt",
+		"ectool version" : "ectool_output.txt",
+
+		"echo ectool cros_ec version:" : "ectool_output.txt",
+		"ectool --name=cros_ec version" : "ectool_output.txt",
+
+		"echo /sys/kernel/debug/cros_ec/pdinfo" : "ectool_original.txt",
+		"cat /sys/kernel/debug/cros_ec/pdinfo" : "ectool_original.txt",
+
+		"echo ectool usbpd 0" : "ectool_original.txt",
+		"ectool usbpd 0" : "ectool_original.txt",
+
+		"echo ectool usbpd 1" : "ectool_original.txt",
+		"ectool usbpd 1" : "ectool_original.txt",
+
+		"echo ectool usbpdpower" : "ectool_output.txt",
+		"ectool usbpdpower | egrep -v -e 'Charger'" : "ectool_output.txt",
+
+		"echo ectool usbpdpower" : "ectool_original.txt",
+		"ectool usbpdpower" : "ectool_original.txt",
+
+		"echo ectool usbpdmuxinfo:" : "ectool_output.txt",
+		"ectool usbpdmuxinfo" : "ectool_output.txt",
+
+		"echo ectool chargestate show:" : "miscellaneous.txt",
+		"ectool chargestate show" : "miscellaneous.txt",
+
+		"echo ectool chipinfo:" : "miscellaneous.txt",
+		"ectool chipinfo" : "miscellaneous.txt",
+
+		"echo ectool pwmgetkblight:" : "miscellaneous.txt",
+		"ectool pwmgetkblight" : "miscellaneous.txt",
+
+		"echo ectool pwmgetfanrpm:" : "miscellaneous.txt",
+		"ectool pwmgetfanrpm" : "miscellaneous.txt",
+
+		"echo ectool thermalget: " : "miscellaneous.txt",
+		"ectool thermalget" : "miscellaneous.txt",
+
+		"echo /sys/class/mei/mei0/fw_ver:" : "miscellaneous.txt",
+		"cat /sys/class/mei/mei0/fw_ver" : "miscellaneous.txt",
+
+		"echo /sys/class/mei/mei0/fw_status:" : "miscellaneous.txt",
+		"cat /sys/class/mei/mei0/fw_status" : "miscellaneous.txt",
+
+		"power_supply_info  | egrep -v -me 'percentage|Ah|state|current|voltage|energy' | cut -d'[' -f 1" : "power_supply_info.txt",
+		"power_supply_info" : "power_supply_info_original.txt",
+
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name authorized -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name device -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name device_name -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name vendor -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name vendor_name -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name tx_speed -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name tx_lanes -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name rx_speed -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name rx_lanes -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name nvm_authenticate -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name nvm_version -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name security -exec grep -i '' {} 2>/dev/null +" : "thunderbolt_devices.txt",
+
+		"find /sys/bus/thunderbolt/devices/*/* -type f -name unique_id -exec grep -i '' {} 2>/dev/null +" : "miscellaneous.txt",
+
+		"echo fwupdmgr get-devices --show-all-devices" : "miscellaneous.txt",
+		"fwupdmgr get-devices --show-all-devices" : "miscellaneous.txt",
+
+		"find /sys/class/power_supply/*/* -type f -name technology -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name manufacturer -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name model_name -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name serial_number -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name type -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name present -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name current_now -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name voltage_now -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+		"find /sys/class/power_supply/*/* -type f -name uevent -exec grep -i '' {} 2>/dev/null +" : "power_supply_sys_class_original.txt",
+
+		"lsblk" : "lsblk_original.txt",
+		"aplay -l | egrep -v -e 'Subdevice'  | cut -d ':' -f2- | sort" : "aplay.txt",
+		"aplay --version" : "aplay_original.txt",
+		"aplay -l" : "aplay_original.txt",
+		"arecord -l | egrep -v -e 'Subdevice' | cut -d ':' -f2- | sort" : "arecord.txt",
+		"arecord --version" : "arecord_original.txt",
+		"arecord -l" : "arecord_original.txt",
+		"amixer -c 0 contents" : "amixer_original.txt",
+		"amixer sget Master" : "amixer_original.txt",
+
+		"echo /proc/asound/pcm:" : "audio_information.txt",
+		"cat /proc/asound/pcm | cut -d ':' -f 2- | sort" : "audio_information.txt",
+		"echo proc/asound/cards:" : "audio_information.txt",
+		"cat /proc/asound/cards" : "audio_information.txt",
+		"echo /lib/firmware/intel/sof/community:" : "audio_information.txt",
+		"md5sum /lib/firmware/intel/sof/community/* | sort" : "audio_information.txt",
+		"for firmwarefilename in /lib/firmware/intel/sof-tplg/* ; do if [ -f $firmwarefilename ]; then md5sum $firmwarefilename;fi; done" : "audio_information.txt",
+		"for path_registers in /sys/kernel/debug/regmap/i2c-MX*/registers; do if [ -f $path_registers ]; then echo $path_registers; cat $path_registers; fi; done" : "audio_information.txt",
+
+		"ls -a /lib/firmware | sort" : "lib_firmware_original.txt",
+		"blkid -c /dev/null" : "blkid_original.txt",
+		"dmidecode" : "dmidecode_original.txt",
+		"cat /proc/cpuinfo | egrep -v -e 'bogomips|cpu MHz|apicid|core id'" : "cpuinfo.txt",
+		"cat /proc/cpuinfo" : "cpuinfo_original.txt",
+		"echo \"/sys/kernel/debug/intel_hw_feedback/hw_state0:\" `cat /sys/kernel/debug/intel_hw_feedback/hw_state`" : "miscellaneous.txt",
+		"echo \"/sys/kernel/debug/intel_hw_feedback/features:\" `cat /sys/kernel/debug/intel_hw_feedback/features`" : "miscellaneous.txt",
+
+		"echo \"/sys/kernel/debug/intel_hw_feedback/capacities:\" `cat /sys/kernel/debug/intel_hw_feedback/capacities`" : "hgs_information.txt",
+		"echo \"Core CPUs /sys/devices/system/cpu/types/intel_core_1/cpulist:\" `cat /sys/devices/system/cpu/types/intel_core_1/cpulist`" : "hgs_information.txt",
+		"echo \"/proc/sys/kernel/sched_itmt_enabled:\" `cat /proc/sys/kernel/sched_itmt_enabled`" : "hgs_information.txt",
+		"echo \"Atom CPUs /sys/devices/system/cpu/types/intel_atom_1/cpulist:\" `cat /sys/devices/system/cpu/types/intel_atom_1/cpulist`" : "hgs_information.txt",
+
+		"cat /proc/meminfo" : "meminfo_original.txt",
+		"cat /proc/partitions" : "partitions_original.txt",
+		"cat /proc/partitions | rev | cut -d' ' -f 1 | rev | sort | egrep -v -e 'sda|sdb|loop' | sort" : "partitions.txt",
+		"cat /proc/mounts" : "proc_mounts_original.txt",
+		"cat /proc/filesystems | sort" : "filesystems.txt",
+		"mount | cut -d' ' -f1-5 | egrep -v -e 'android|PepperFlashPlayer|loop|fuse.drivefs' | sort" : "mount.txt",
+		"mount" : "mount_original.txt",
+		"if [ -e /dev/mmcblk0 ]; then cgpt show /dev/mmcblk0; fi" : "cgpt_original.txt",
+		"if [ -e /dev/nvme0n1 ]; then cgpt show /dev/nvme0n1; fi" : "cgpt_original.txt",
+		"crossystem" : "crossystem_original.txt",
+		"crossystem | egrep -v -e 'vdat_timers|fw_prev_result|fw_result|vdat_flags|devsw_boot|devsw_cur|mainfw_type'" : "crossystem.txt",
+		"cbmem -c" : "cbmem_c_original.txt",
+		"cbmem -t" : "cbmem_t_original.txt",
+		"cbmem -l" : "cbmem_L_original.txt",
+		"cbmem -1" : "cbmem_one_original.txt",
+		"cat /proc/bus/input/devices" : "bus_input_devices_original.txt",
+		"cat /proc/bus/pci/devices" : "bus_pci_devices_original.txt",
+		"cat /proc/bus/pci/devices | awk '{print $NF}' | sort" : "bus_pci_devices.txt",
+		"cat /proc/devices | awk -F ' ' '{print $2}' | sort" : "proc_devices_original.txt",
+		"cat /proc/devices" : "proc_devices_original.txt",
+		"cat /proc/ioports" : "proc_ioports_original.txt",
+		"cat /proc/interrupts" : "proc_interrupts_original.txt",
+		"cat /proc/softirqs" : "softirqs_original.txt",
+		"lsmod" : "lsmod_original.txt",
+		"cat /proc/modules" : "proc_modules_original.txt",
+
+		"echo hcitool dev:" : "hcitool_dev.txt",
+		"hcitool dev" : "hcitool_dev.txt",
+
+		"echo hcitool con:" : "hcitool_dev.txt",
+		"hcitool con" : "hcitool_dev.txt",
+
+		"echo hciconfig -a:" : "hcitool_dev.txt",
+		"hciconfig -a | egrep -v -e 'RX|TX'" : "hcitool_dev.txt",
+
+		"echo bluetoothctl --version:" : "hcitool_dev.txt",
+		"bluetoothctl --version" : "hcitool_dev.txt",
+
+		"cat /sys/kernel/debug/pmc_core/slp_s0_residency_usec" : "slp_s0_residency_usec.txt",
+		"cat /sys/kernel/debug/pmc_core/substate_residencies" : "substate_residencies_original.txt",
+		"cat /sys/kernel/debug/suspend_stats" : "suspend_stats_original.txt",
+		"echo \"/sys/power/pm_print_times: \" `cat /sys/power/pm_print_times`" : "pm_print_times.txt",
+		"cat /run/power_manager/root/last_resume_timings" : "last_resume_timings.txt",
+
+		"echo \" slp_s0_residency_usec:\" `cat /sys/kernel/debug/pmc_core/slp_s0_residency_usec`" : "miscellaneous.txt",
+		"echo \" suspend_to_idle:\" `cat /var/lib/power_manager/suspend_to_idle`" : "miscellaneous.txt",
+		"echo \"ltr_ignore:\" `cat /sys/kernel/debug/pmc_core/ltr_ignore`" : "miscellaneous.txt",
+		"echo \"ltr_show:\" `cat /sys/kernel/debug/pmc_core/ltr_show`" : "miscellaneous.txt",
+		"echo \"last_wake_source:\" `cat /sys/kernel/debug/pmc_core/last_wake_source`" : "miscellaneous.txt",
+		"echo \"slp_s0_dbg_latch:\" `cat /sys/kernel/debug/pmc_core/slp_s0_dbg_latch`" : "miscellaneous.txt",
+		"echo \"/proc/net/route:\" `cat /proc/net/route`" : "miscellaneous.txt",
+		"echo \" uname -a:\" `uname -a`" : "miscellaneous.txt",
+		"echo \" uptime:\" `cat /proc/uptime`" : "miscellaneous.txt",
+
+		"echo df /mnt/stateful_partition:" : "miscellaneous.txt",
+		"df /mnt/stateful_partition" : "miscellaneous.txt",
+
+		"echo du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted:" : "miscellaneous.txt",
+		"du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted" : "miscellaneous.txt",
+
+		"echo du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted/chronos:" : "miscellaneous.txt",
+		"du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted/chronos" : "miscellaneous.txt",
+
+		"echo du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted/var:" : "miscellaneous.txt",
+		"du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted/var" : "miscellaneous.txt",
+
+		"echo du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted.block:" : "miscellaneous.txt",
+		"du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/encrypted.block" : "miscellaneous.txt",
+
+		"echo du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/dev_image:" : "miscellaneous.txt",
+		"du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/dev_image" : "miscellaneous.txt",
+
+		"echo du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/home:" : "miscellaneous.txt",
+		"du --block-size=1 --summarize --one-file-system /mnt/stateful_partition/home" : "miscellaneous.txt",
+
+		"echo \" rootdev:\" `rootdev`" : "miscellaneous.txt",
+		"echo elan_i2chid_iap -i:" : "miscellaneous.txt",
+		"elan_i2chid_iap -i" : "miscellaneous.txt",
+		"echo elan_i2chid_read_fwid -i:" : "miscellaneous.txt",
+		"elan_i2chid_read_fwid -i" : "miscellaneous.txt",
+
+		"check_powerd_config --suspend_to_idle; Value_check_powerd_config=$?; echo \" check_powerd_config: echo \" $Value_check_powerd_config" : "miscellaneous.txt",
+		"cat /sys/kernel/debug/pmc_core/package_cstate_show" : "package_cstate_show.txt",
+		"cat /sys/kernel/debug/pmc_core/package_cstate_show | grep 'Package C10' | awk -F ': ' '{ print $2 }'" : "package_cstate_show_C10.txt",
+
+		"echo \"/sys/kernel/debug/pmc_core/slp_s0_debug_status: \" `cat /sys/kernel/debug/pmc_core/slp_s0_debug_status`" : "slp_s0_debug_status_original.txt",
+		"cat /sys/kernel/debug/wakeup_sources" : "wakeup_sources_original.txt",
+		"cat /sys/kernel/debug/pmc_core/substate_status_registers" : "substate_status_registers_original.txt",
+		"cat /sys/kernel/debug/pmc_core/substate_live_status_registers" : "substate_live_status_registers_original.txt",
+
+		"cras_test_client --dump_server_info" : "cras_test_client_original.txt",
+		"top -Hbc -w128 -n 1 | head -15" : "top_cpu_load_original.txt",
+		"top -o +%MEM -w128 -bcn 1 | head -15" : "top_memory_load_original.txt",
+		"ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -6" : "ps_eo_original.txt",
+		"ps afu --sort=%cpu | head -6" : "ps_afu_original.txt",
+		"ps -auxZ" : "ps_aux_original.txt",
+		"cat /proc/stat" : "proc_stat_original.txt",
+		"df -hak" : "df_hak_original.txt",
+		"df" : "df_hak_original.txt",
+
+		"echo \" content of /sys/devices/system/edac:\" `find /sys/devices/system/edac/ -type f ! -name 'seconds_since_reset' -exec grep -i '' {} 2>/dev/null +`" : "ibecc_edac.txt",
+		"echo \" find /sys/devices/system/edac:\" `find /sys/devices/system/edac -type f -print`" : "ibecc_edac.txt",
+		"echo \" content of /sys/module/edac_core/parameters:\" `find /sys/module/edac_core/parameters -type f -exec grep -i '' {} 2>/dev/null +`" : "ibecc_edac.txt",
+		"echo \" find /sys/module/edac_core/parameters:\" `find /sys/module/edac_core/parameters -type f -print`" : "ibecc_edac.txt",
+
+		"echo /sys/bus/usb/devices/:" : "usb_power_content_original.txt",
+		"ls /sys/bus/usb/devices/ | sort" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name authorized -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name idProduct -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name idVendor -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name manufacturer -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name product -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name removable -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name rx_lanes -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name serial -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name speed -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/* -type f -name tx_lanes -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/*/* -type f -name autosuspend -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+		"find /sys/bus/usb/devices/*/*/* -type f -name runtime_enabled -exec grep -i '' {} 2>/dev/null +" : "usb_power_content_original.txt",
+
+		"cat /var/log/bios_times.txt" : "bios_times_original.txt",
+
+		"for ucode_firmware_file in /lib/firmware/*.ucode; do if [ -f $ucode_firmware_file ]; then echo \" iwlwifi firmware file: $ucode_firmware_file:\" `hexdump -C $ucode_firmware_file | head -5`;fi;done" : "iwlwifi_firmware_hexdump_original.txt",
+		"seconds_kernel_to_chrome_exec=$(cat /tmp/uptime-chrome-exec |awk '{print $1}' | head -1);echo \" Boot-time metrics: seconds_kernel_to_chrome_exec:\" $seconds_kernel_to_chrome_exec" : "miscellaneous.txt",
+		"seconds_kernel_to_chrome_main=$(cat /tmp/uptime-chrome-main |awk '{print $1}' | head -1); echo \" Boot-time metrics: seconds_kernel_to_chrome_main:\" $seconds_kernel_to_chrome_main" : "miscellaneous.txt",
+		"seconds_kernel_to_login=$(cat /tmp/uptime-login-prompt-visible |awk '{print $1}' | head -1); echo \" Boot-time metrics: seconds_kernel_to_login:\" $seconds_kernel_to_login" : "miscellaneous.txt",
+		"seconds_kernel_to_network_ethernet_ready=$(cat /tmp/uptime-network-ethernet-ready |awk '{print $1}' | head -1); echo \" Boot-time metrics: seconds_kernel_to_network_ethernet_ready:\" $seconds_kernel_to_network_ethernet_ready" : "miscellaneous.txt",
+		"seconds_kernel_to_network_wifi_ready=$(cat /tmp/uptime-network-wifi-ready |awk '{print $1}' | head -1); echo \" Boot-time metrics: seconds_kernel_to_network_wifi_ready:\" $seconds_kernel_to_network_wifi_ready" : "miscellaneous.txt",
+		"seconds_kernel_to_startup=$(cat /tmp/uptime-pre-startup |awk '{print $1}' | head -1); echo \" Boot-time metrics: seconds_kernel_to_startup:\" $seconds_kernel_to_startup" : "miscellaneous.txt",
+		"seconds_kernel_to_startup_done=$(cat /tmp/uptime-post-startup |awk '{print $1}' | head -1); echo \" Boot-time metrics: seconds_kernel_to_startup_done:\" $seconds_kernel_to_startup_done" : "miscellaneous.txt",
+		"seconds_power_on_to_kernel=$(cat /tmp/firmware-boot-time | head -1); echo \" Boot-time metrics: seconds_power_on_to_kernel:\" $seconds_power_on_to_kernel" : "miscellaneous.txt",
+
+		"bootstat_summary | tail -40" : "boot_summary_original.txt",
+
+		"file_listing=`ls /var/spool/crash/*.dmp  | wc -l`; if [ $file_listing != 0 ]; then echo \" /var/spool/crash/*.dmp \" `ls -f /var/spool/crash/*.dmp | wc -l; ls -l /var/spool/crash/*.dmp`; fi | sort" : "crash.txt",
+		"file_listing=`ls /var/spool/crash/*.bios_log  | wc -l`; if [ $file_listing != 0 ]; then echo \" /var/spool/crash/*.bios_log \" `ls -f /var/spool/crash/*.bios_log | wc -l; ls -l /var/spool/crash/*.bios_log`;fi | sort" : "crash.txt",
+		"file_listing=`ls /var/spool/crash/*.kcrash  | wc -l`; if [ $file_listing != 0 ]; then echo \" /var/spool/crash/*.kcrash \" `ls -f /var/spool/crash/*.kcrash | wc -l; ls -l /var/spool/crash/*.kcrash`;fi | sort" : "crash.txt",
+		"file_listing=`ls /var/log/iwl*.tgz  | wc -l`; if [ $file_listing != 0 ]; then echo \" /var/log/iwl*.tgz \" `ls -f /var/log/iwl*.tgz | wc -l;ls -l /var/log/iwl*.tgz`;fi | sort" : "crash.txt",
+
+		"if [[ -d /var/spool/crash && -n '$(ls -A /var/spool/crash)' ]]; then echo \" /var/spool/crash:\" `ls -l /var/spool/crash/*`;fi" : "crash_original.txt",
+
+		"file_listing=`ls /home/chronos/user/crash/*.dmp | wc -l`; if [ $file_listing != 0 ]; then echo \" /home/chronos/user/crash/*.dmp \" `ls -f /home/chronos/user/crash/*.dmp | wc -l; ls -l /home/chronos/user/crash/*.dmp`; fi | sort" : "crash.txt",
+		"file_listing=`ls /home/chronos/user/crash/*.meta | wc -l`; if [ $file_listing != 0 ]; then echo \" /home/chronos/user/crash/*.meta \" `ls -f /home/chronos/user/crash/*.meta | wc -l; ls -l /home/chronos/user/crash/*.meta`;fi | sort" : "crash.txt",
+		"file_listing=`ls /home/chronos/user/crash/*.core | wc -l`; if [ $file_listing != 0 ]; then echo \" /home/chronos/user/crash/*.core \" `ls -f /home/chronos/user/crash/*.core | wc -l; ls -l /home/chronos/user/crash/*.core`;fi | sort" : "crash.txt",
+		"if [[ -d /home/chronos/user/crash && -n '$(ls -A /home/chronos/user/crash)' ]]; then echo \" /home/chronos/user/crash \" `ls -lg /home/chronos/user/crash/*.*`; fi" : "crash_original.txt",
+		"if [[ -d /sys/fs/pstore && -n '$(ls -A /sys/fs/pstore)' ]]; then echo \" /sys/fs/pstore/ \" `ls -f /sys/fs/pstore/* | wc -l; ls -l /sys/fs/pstore/*`;fi | sort" : "crash_original.txt",
+
+		"echo /sys/fs/pstore/console-ramoops:" : "crash.txt",
+		"ls -l /sys/fs/pstore/console-ramoops*" : "crash.txt",
+
+		"echo /dev/pstore:" : "crash.txt",
+		"ls -f /dev/pstore | wc -l; ls -l /dev/pstore | sort" : "crash.txt",
+
+		"echo GPU hang: /sys/class/drm/card0/error:" : "miscellaneous.txt",
+		"ls -l /sys/class/drm/card0/error" : "miscellaneous.txt",
+
+		"echo /sys/class/drm/card0/error:" : "crash.txt",
+		"ls -f /sys/class/drm/card0/error" : "crash.txt",
+
+		"echo /sys/kernel/debug/cros_ec/panicinfo:" : "crash.txt",
+		"if [ -f /sys/kernel/debug/cros_ec/panicinfo ]; then ls -f /sys/kernel/debug/cros_ec/panicinfo; fi" : "crash.txt",
+
+		"echo \"/sys/kernel/debug/dri/*/i915_error_state:\" `ls -f /sys/kernel/debug/dri/*/i915_error_state`" : "crash.txt",
+
+		"echo \" last_resume_result:\" `cat /sys/kernel/debug/cros_ec/last_resume_result`" : "miscellaneous.txt",
+
+		"elogtool list | tail -100" : "elogtool_list_original.txt",
+
+		"echo flashrom -p ec --wp-status:" : "flashrom_original.txt",
+		"flashrom -p ec --wp-status" : "flashrom_original.txt",
+
+		"echo flashrom -p host --wp-status:" : "flashrom_original.txt",
+		"flashrom -p host --wp-status" : "flashrom_original.txt",
+
+		"echo flashrom --wp-list:" : "flashrom_original.txt",
+		"flashrom --wp-list" : "flashrom_original.txt",
+
+		"echo flashrom --get-size:" : "flashrom_original.txt",
+		"flashrom --get-size" : "flashrom_original.txt",
+
+		"echo flashrom --flash-name:" : "flashrom_original.txt",
+		"flashrom --flash-name" : "flashrom_original.txt",
+
+		"echo \" mosys platform name:\" `mosys platform name`" : "flashrom_original.txt",
+		"echo \" mosys platform model:\" `mosys platform model`" : "flashrom_original.txt",
+		"echo \" mosys platform version:\" `mosys platform version`" : "flashrom_original.txt",
+		"echo \" mosys platform sku:\" `mosys platform sku`" : "flashrom_original.txt",
+		"echo \" mosys memory spd print all:\" `mosys memory spd print all`" : "flashrom_original.txt",
+		"echo \" mosys ec info:\" `mosys ec info`" : "flashrom_original.txt",
+		"echo \" mosys ec info -s fw_version:\" `mosys ec info -s fw_version`" : "flashrom_original.txt",
+		"cat /var/log/cros_ec.log | tail -3500" : "cros_ec_original.txt",
+		"cat /var/log/cros_ec.previous | tail -3500" : "cros_ec_previous_original.txt",
+		"echo \" cr50-version: \" " : "cr50_original.txt",
+		"cat /var/cache/cr50-version" : "cr50_original.txt",
+		"echo CR50 firmware version:" : "cr50_original.txt",
+		"gsctool -a -f -w" : "cr50_original.txt",
+
+		"initctl list | sort" : "initctl_list_original.txt",
+
+		"echo ip a:" : "ip_original.txt",
+		"ip a" : "ip_original.txt",
+		"echo ip route:" : "ip_original.txt",
+		"ip route" : "ip_original.txt",
+
+		"ip -s link" : "ip_s_link_original.txt",
+
+		"echo ip -o -4 addr list wlan0:" : "ip_original.txt",
+		"ip -o -4 addr list wlan0 | awk '{print $4}' | cut -d/ -f1" : "ip_original.txt",
+
+		"echo ip -o -4 addr list eth0:" : "ip_original.txt",
+		"ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1" : "ip_original.txt",
+
+		"echo ip -o -4 addr list eth1:" : "ip_original.txt",
+		"ip -o -4 addr list eth1 | awk '{print $4}' | cut -d/ -f1" : "ip_original.txt",
+
+		"ifconfig" : "ifconfig_original.txt",
+		"iwconfig" : "iwconfig_original.txt",
+		"iw list" : "iw_list_original.txt",
+		"iw dev" : "iw_dev_original.txt",
+
+		"echo \"/etc/resolv.conf:\" `cat /etc/resolv.conf`" : "miscellaneous.txt",
+		"grep --with-filename '' $(find /run/chromeos-config/v1/ -type f)" : "miscellaneous.txt",
+
+		"cat /var/log/power_manager/powerd.LATEST | tail -500" : "powerd.LATEST_500Lines_original.txt"
+	}
+}
