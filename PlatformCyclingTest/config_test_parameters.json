@@ -8,7 +8,7 @@
 	"move_var_log_messages_folder" : "Yes",
 	"set_corp_proxy" : "No",
 	"capture_DRM_logs" : "No",
-	"login_to_DUT" : "Yes",
+	"login_to_DUT" : "No",
 	"enumerate_Thunderbolt_TR_devices" : "No",
 	"enumerate_TBT_AR_USB4_devices" : "No",
 	"stop_on_error_screenshot" : "No",
